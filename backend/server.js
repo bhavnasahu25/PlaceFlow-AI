@@ -3,7 +3,10 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 
 const connectDB = require("./database/db");
+
 const authRoutes = require("./routes/authRoutes");
+const studentRoutes = require("./routes/studentRoutes");
+
 const { protect } = require("./middleware/authMiddleware");
 
 dotenv.config();
@@ -12,13 +15,19 @@ connectDB();
 
 const app = express();
 
+// ==========================
 // Middleware
+// ==========================
 app.use(cors());
 app.use(express.json());
 
+// ==========================
 // Routes
+// ==========================
 app.use("/api/auth", authRoutes);
+app.use("/api/student", studentRoutes);
 
+// Protected Route (JWT Test)
 app.get("/api/profile", protect, (req, res) => {
   res.status(200).json({
     success: true,
@@ -27,10 +36,14 @@ app.get("/api/profile", protect, (req, res) => {
   });
 });
 
+// Home Route
 app.get("/", (req, res) => {
   res.send("🚀 PlaceFlow AI Backend Running...");
 });
 
+// ==========================
+// Server
+// ==========================
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
