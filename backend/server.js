@@ -1,12 +1,12 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
-
+const jobRoutes = require("./routes/jobRoutes");
 const connectDB = require("./database/db");
 
 const authRoutes = require("./routes/authRoutes");
 const studentRoutes = require("./routes/studentRoutes");
-
+const companyRoutes = require("./routes/companyRoutes");
 const { protect } = require("./middleware/authMiddleware");
 
 dotenv.config();
@@ -26,7 +26,8 @@ app.use(express.json());
 // ==========================
 app.use("/api/auth", authRoutes);
 app.use("/api/student", studentRoutes);
-
+app.use("/api/company", companyRoutes);
+app.use("/api/jobs", jobRoutes);
 // Protected Route (JWT Test)
 app.get("/api/profile", protect, (req, res) => {
   res.status(200).json({
