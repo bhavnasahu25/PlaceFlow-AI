@@ -1,3 +1,4 @@
+const uploadImage = require("../middleware/uploadProfileImage");
 const express = require("express");
 const router = express.Router();
 
@@ -8,8 +9,8 @@ const {
   getStudentProfile,
   updateStudentProfile,
   uploadResume,
+  uploadProfileImage,
 } = require("../controllers/studentController");
-
 // Get Profile
 router.get("/profile", protect, getStudentProfile);
 
@@ -23,5 +24,10 @@ router.put(
   upload.single("resume"),
   uploadResume
 );
-
+router.put(
+  "/profile-image",
+  protect,
+  uploadImage.single("profileImage"),
+  uploadProfileImage
+);
 module.exports = router;

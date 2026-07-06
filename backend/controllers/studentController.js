@@ -63,6 +63,37 @@ const updateStudentProfile = async (req, res) => {
   }
 };
 // ==========================
+// Upload Profile Image
+// ==========================
+const uploadProfileImage = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    user.profileImage = req.file.path;
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Profile Image Uploaded Successfully",
+      profileImage: user.profileImage,
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+// ==========================
 // Upload Resume
 // ==========================
 const uploadResume = async (req, res) => {
@@ -97,4 +128,5 @@ module.exports = {
   getStudentProfile,
   updateStudentProfile,
   uploadResume,
+  uploadProfileImage,
 };
