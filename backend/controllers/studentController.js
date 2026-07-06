@@ -124,9 +124,43 @@ const uploadResume = async (req, res) => {
     });
   }
 };
+// ==========================
+// Update Skills
+// ==========================
+const updateSkills = async (req, res) => {
+  try {
+    const { skills } = req.body;
+
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    user.skills = skills;
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Skills Updated Successfully",
+      skills: user.skills,
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 module.exports = {
   getStudentProfile,
   updateStudentProfile,
   uploadResume,
   uploadProfileImage,
+  updateSkills,
 };

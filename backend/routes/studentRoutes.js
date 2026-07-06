@@ -1,16 +1,19 @@
-const uploadImage = require("../middleware/uploadProfileImage");
 const express = require("express");
 const router = express.Router();
 
 const { protect } = require("../middleware/authMiddleware");
-const upload = require("../middleware/uploadResume");
+
+const uploadResume = require("../middleware/uploadResume");
+const uploadImage = require("../middleware/uploadProfileImage");
 
 const {
   getStudentProfile,
   updateStudentProfile,
-  uploadResume,
+  uploadResume: uploadResumeController,
   uploadProfileImage,
+  updateSkills,
 } = require("../controllers/studentController");
+
 // Get Profile
 router.get("/profile", protect, getStudentProfile);
 
@@ -21,13 +24,19 @@ router.put("/profile", protect, updateStudentProfile);
 router.put(
   "/resume",
   protect,
-  upload.single("resume"),
-  uploadResume
+  uploadResume.single("resume"),
+  uploadResumeController
 );
+
+// Upload Profile Image
 router.put(
   "/profile-image",
   protect,
   uploadImage.single("profileImage"),
   uploadProfileImage
 );
+
+// Update Skills
+router.put("/skills", protect, updateSkills);
+
 module.exports = router;
